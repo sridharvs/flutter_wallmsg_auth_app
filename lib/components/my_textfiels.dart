@@ -15,8 +15,12 @@ class MyTextField extends StatelessWidget {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        hintText: hintText,
       ),
+      obscureText: obscureText,
     );
   }
 }
