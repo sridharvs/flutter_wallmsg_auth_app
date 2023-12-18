@@ -1,21 +1,64 @@
-// ignore_for_file: must_be_immutable
-
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wallmsg_auth_app/components/my_button.dart';
 import 'package:flutter_wallmsg_auth_app/components/my_textfiels.dart';
+import 'package:flutter_wallmsg_auth_app/hepler/helper_function.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   final void Function()? onTap;
 
   RegisterPage({super.key, this.onTap});
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
   //text controller
   final userNameController = TextEditingController();
+
   final emailController = TextEditingController();
+
   final passwordController = TextEditingController();
+
   final confirmPasswordController = TextEditingController();
 
   //register method
-  void register() {}
+  Future<void> register() async {
+    //show loading circle
+    showDialog(
+      context: context,
+      builder: (context) => Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+    // make sure password match
+    if (passwordController.text != confirmPasswordController.text) {
+      //pop loading circle
+      Navigator.pop(context);
+      //display error msg to user
+      displayMessageToUser("Password does't match", context);
+    } else {
+      //if password do match
+      try {
+        //try creating the user
+        UserCredential? userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+
+        //pop loading circle
+        Navigator.pop(context);
+      } on FirebaseAuthException catch (e) {
+        //pop loading circle
+        Navigator.pop(context);
+        //display error message to users
+        displayMessageToUser(e.code, context);
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +68,7 @@ class RegisterPage extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               //logo
               Icon(
@@ -45,7 +88,7 @@ class RegisterPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                height: 50,
+                height: 30,
               ),
               //usernmae textfield
               MyTextField(
@@ -73,7 +116,7 @@ class RegisterPage extends StatelessWidget {
                   obscureText: true,
                   controller: passwordController),
               const SizedBox(
-                height: 20,
+                height: 10,
               ),
               //confirm textfield
               MyTextField(
@@ -120,7 +163,7 @@ class RegisterPage extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: onTap,
+                    onTap: widget.onTap,
                     child: const Text(
                       " then LogIn Here",
                       style: TextStyle(
