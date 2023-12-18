@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "848967249496",
+    "project_id": "wall-message-app",
+    "storage_bucket": "wall-message-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:848967249496:android:940272f1a0f6ebc00fa42d",
+        "android_client_info": {
+          "package_name": "com.example.flutter_wallmsg_auth_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9m3JZe4w3GSKMYG6rP8-N68e0GXk1j1w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
