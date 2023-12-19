@@ -19,15 +19,6 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Center(
-          child: Text(
-            "Profile",
-          ),
-        ),
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        elevation: 0,
-      ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: getUserDetails(),
@@ -49,14 +40,51 @@ class ProfilePage extends StatelessWidget {
             Map<String, dynamic>? user = snapshot.data!.data();
             return Center(
               child: Column(
+                //mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(user!['email']),
-                  Text(user!['username']),
+                  //for back button
+                  const Padding(
+                    padding: EdgeInsets.only(top: 50, left: 20),
+                    child: Row(
+                      children: [
+                        BackButton(),
+                      ],
+                    ),
+                  ),
+                  //profile picture
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.primary,
+                      borderRadius: BorderRadius.circular(25),
+                    ),
+                    padding: const EdgeInsets.all(25),
+                    child: const Icon(
+                      Icons.person,
+                      size: 60,
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  Text(
+                    user!['username'],
+                    style: const TextStyle(
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    user!['email'],
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ],
               ),
             );
           } else {
-            return Text("No Data");
+            return const Text("No Data");
           }
         },
       ),
