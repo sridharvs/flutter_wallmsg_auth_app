@@ -1,5 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_wallmsg_auth_app/components/my_button.dart';
 import 'package:flutter_wallmsg_auth_app/components/my_textfiels.dart';
@@ -17,11 +17,8 @@ class RegisterPage extends StatefulWidget {
 class _RegisterPageState extends State<RegisterPage> {
   //text controller
   final userNameController = TextEditingController();
-
   final emailController = TextEditingController();
-
   final passwordController = TextEditingController();
-
   final confirmPasswordController = TextEditingController();
 
   //register method
@@ -48,15 +45,30 @@ class _RegisterPageState extends State<RegisterPage> {
           email: emailController.text,
           password: passwordController.text,
         );
-
+        // create a user document and add to firebase
+        createUserDocuments(userCredential);
         //pop loading circle
-        Navigator.pop(context);
+        if (mounted) Navigator.pop(context);
       } on FirebaseAuthException catch (e) {
         //pop loading circle
         Navigator.pop(context);
         //display error message to users
+        // ignore: use_build_context_synchronously
         displayMessageToUser(e.code, context);
       }
+    }
+  }
+
+  //create a user document and collect them in firebase
+  Future<void> createUserDocuments(UserCredential? userCredential) async {
+    if (userCredential != null && userCredential.user != null) {
+      await FirebaseFirestore.instance
+          .collection("Users")
+          .doc(userCredential.user!.email)
+          .set({
+        'email': userCredential.user!.email,
+        'username': userNameController.text,
+      });
     }
   }
 
